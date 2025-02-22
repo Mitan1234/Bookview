@@ -1,0 +1,74 @@
+﻿@model Bookview.Models.Book
+
+@{
+    ViewData["Title"] = "Edytuj książkę";
+}
+
+<h1>Edytuj książkę</h1>
+
+<h4>Wypełnij formularz</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BookId" />
+            <input type="hidden" asp-for="CoverImage" /> <!-- Potrzebne do zachowania starego obrazka -->
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Podgląd aktualnej okładki -->
+            <div class="form-group">
+                <label>Aktualna okładka:</label><br />
+                @if (!string.IsNullOrEmpty(Model.CoverImage))
+                {
+                    <img src="~/graphic/@Model.CoverImage" alt="Okładka książki" class="img-thumbnail" width="150">
+                }
+                else
+                {
+                    <img src="~/graphic/default.jpg" alt="Brak okładki" class="img-thumbnail" width="150">
+                }
+            </div>
+
+            <!-- Możliwość przesłania nowej okładki -->
+            <div class="form-group">
+                <label asp-for="CoverImageFile" class="control-label"></label>
+                <input type="file" asp-for="CoverImageFile" class="form-control" accept="image/*" />
+                <span asp-validation-for="CoverImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                    <option value="">-- Wybierz kategorię --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Bookview.Models.Book>
+
+@{
+    ViewData["Title"] = "Lista książek";
+}
+
+<h1>Lista książek</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Dodaj nową książkę</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Author)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>Okładka</th> <!-- Zmieniona nazwa kolumny -->
+            <th>@Html.DisplayNameFor(model => model.Category)</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.CoverImage))
+                    {
+                        <img src="@Url.Content("~/graphic/" + item.CoverImage)" alt="Okładka książki" class="img-thumbnail" width="100">
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/graphic/default.jpg")" alt="Brak okładki" class="img-thumbnail" width="100">
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-warning btn-sm">Edytuj</a>
+                    <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info btn-sm">Szczegóły</a>
+                    <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger btn-sm">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
